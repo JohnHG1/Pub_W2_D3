@@ -12,8 +12,8 @@ class TestCustomer < MiniTest::Test
     @customer1 = Customer.new("Luke", 100, 28)
     @customer2 = Customer.new("John", 20, 29)
     @Pub1 = Pub.new("4043", 1000)
-    @drink1 = Drink.new("Rum", 5)
-    @drink2 = Drink.new("Beer", 2)
+    @drink1 = Drink.new("Rum", 5, 2)
+    @drink2 = Drink.new("Beer", 2, 1)
   end
 
   def test_remove_money_from_wallet()
@@ -22,11 +22,18 @@ class TestCustomer < MiniTest::Test
   end
 
   def test_can_buy_drink()
-    @customer2.buy_drink(@drink1.price, @Pub1)
+    @customer2.buy_drink(@drink1.price, @Pub1, @drink1.alcohol_level)
     assert_equal(15, @customer2.wallet)
     assert_equal(1005, @Pub1.till)
-
+    assert_equal(2, @customer2.drunkenness)
   end
+
+  def test_increase_drunkenness()
+    @customer2.increase_drunkenness(@drink1.alcohol_level)
+    assert_equal(2, @customer2.drunkenness)
+  end
+
+
 
 
 end

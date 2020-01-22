@@ -12,9 +12,10 @@ class TestPub < MiniTest::Test
     @Pub1 = Pub.new("4043", 1000)
     @customer1 = Customer.new("Luke", 100, 17)
     @customer2 = Customer.new("John", 20, 29)
-    @drink1 = Drink.new("Rum", 5)
-    @drink2 = Drink.new("Beer", 2)
-    drinks = [@drink1, @drink2]
+    @drink1 = Drink.new("Rum", 5, 2)
+    @drink2 = Drink.new("Beer", 2, 1)
+    @drink3 = Drink.new("Liver_failure", 20, 30)
+    drinks = [@drink1, @drink2, @drink3]
   end
 
   def test_can_get_drink_price
@@ -57,15 +58,25 @@ class TestPub < MiniTest::Test
   #no need for function as attr_reader access customer and gets the info from there
 
   def test_can_sell_drink__pass()
-    @Pub1.sell_drink(@drink1.price, @customer2, @customer2.age)
+    @Pub1.sell_drink(@drink1.price, @customer2, @customer2.age, @customer2.drunkenness, @drink1.alcohol_level)
     assert_equal(15, @customer2.wallet)
     assert_equal(1005, @Pub1.till)
+    assert_equal(2, @customer2.drunkenness)
   end
 
   def test_can_sell_drink__fail()
-    @Pub1.sell_drink(@drink1.price, @customer1, @customer1.age)
+    @Pub1.sell_drink(@drink1.price, @customer1, @customer1.age, @customer1.drunkenness, @drink1.alcohol_level)
     assert_equal(100, @customer1.wallet)
     assert_equal(1000, @Pub1.till)
+    assert_equal(0, @customer1.drunkenness)
   end
+
+  def test_can_sell_drink__fail_drunkenness()
+    @Pub1.sell_drink(@drink3.price, @customer2, @customer2.age, @customer2.drunkenness, @drink3.alcohol_level)
+    assert_equal(20, @customer2.wallet)
+    assert_equal(1000, @Pub1.till)
+    assert_equal(30, @customer2.drunkenness)
+  end
+
 
 end

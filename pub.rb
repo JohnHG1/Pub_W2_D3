@@ -26,12 +26,15 @@ class Pub
     end
   end
 
-  def sell_drink(drink, customer, age)
-    if age >= 18
-    customer.remove_money_from_wallet(drink)
-    add_money_to_till(drink)
+  def sell_drink(drink, customer, age, drunkenness, alcohol_level)
+    while drunkenness < 10
+      if age >= 18
+        customer.remove_money_from_wallet(drink)
+        add_money_to_till(drink)
+        customer.increase_drunkenness(alcohol_level)
       else return false
       end
+    end
   end
 
 
